@@ -87,7 +87,17 @@ if uploaded_file and analyze:
 
         progress.progress(percent)
 
-    result = run_workflow(state)
+    try:
+
+        result = run_workflow(state)
+
+    except Exception as e:
+
+        st.error("❌ ResearchMind AI encountered an error.")
+
+        st.exception(e)
+
+        st.stop()
 
     progress.progress(100)
 
