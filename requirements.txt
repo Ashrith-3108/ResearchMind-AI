@@ -18,7 +18,7 @@ python-multipart
 # PDF Processing
 pdfplumber
 reportlab
-pymupdf
+PyMuPDF==1.26.3
 # Text Processing
 tiktoken
 
