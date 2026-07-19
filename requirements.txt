@@ -1,0 +1,56 @@
+# AI / LLM
+langgraph
+langchain
+langchain-core
+langchain-openai
+openai
+
+# Configuration
+python-dotenv
+pydantic
+pydantic-settings
+
+# API (optional)
+fastapi
+uvicorn
+python-multipart
+
+# PDF Processing
+pdfplumber
+reportlab
+
+# Text Processing
+tiktoken
+
+# Embeddings / Vector Search
+sentence-transformers
+faiss-cpu
+
+# Text Chunking
+langchain-text-splitters
+
+# Data
+numpy
+pandas
+
+# UI
+streamlit
+plotly
+
+# Caching
+diskcache
+
+# Logging
+loguru
+
+# Utilities
+rich
+tqdm
+
+# Optional Future Models
+langchain-google-genai
+chromadb
+
+# Testing
+pytest
+pytest-cov
