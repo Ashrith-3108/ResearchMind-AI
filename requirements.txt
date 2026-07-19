@@ -54,3 +54,5 @@ chromadb
 # Testing
 pytest
 pytest-cov
+
+torchvision
