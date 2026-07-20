@@ -23,8 +23,8 @@ class Settings(BaseSettings):
 
     #MODEL_NAME: str = "openai/gpt-4.1"
     GEMINI_API_KEY: str
-
-    MODEL_NAME: str = "gemini-2.5-flash"
+    MODEL_NAME: str = "gemini-2.0-flash"
+    #MODEL_NAME: str = "gemini-2.5-flash"
     TEMPERATURE: float = 0.0
 
     MAX_TOKENS: int = 1024
