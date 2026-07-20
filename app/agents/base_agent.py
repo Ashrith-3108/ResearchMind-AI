@@ -38,7 +38,35 @@ Do not wrap the JSON inside markdown.
 
         if hasattr(response, "content"):
 
-            raw = response.content.strip()
+            # OpenAI / OpenRouter
+            if isinstance(response.content, str):
+
+                raw = response.content.strip()
+
+            # Gemini
+            elif isinstance(response.content, list):
+
+                texts = []
+
+                for part in response.content:
+
+                    if isinstance(part, str):
+
+                        texts.append(part)
+
+                    elif hasattr(part, "text"):
+
+                        texts.append(part.text)
+
+                    else:
+
+                        texts.append(str(part))
+
+                raw = "\n".join(texts).strip()
+
+            else:
+
+                raw = str(response.content).strip()
 
         if not raw:
 
@@ -54,7 +82,11 @@ Do not wrap the JSON inside markdown.
 
         try:
 
-            return parser.parse(raw)
+            result = parser.parse(raw)
+
+            logger.info("Successfully parsed LLM response.")
+
+            return result
 
         except Exception as e:
 
