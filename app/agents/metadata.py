@@ -1,6 +1,7 @@
 from app.agents.base_agent import BaseAgent
 from app.models.metadata import MetadataOutput
 from app.services.logger_service import logger
+from app.services.chunk_service import chunk_service
 
 
 METADATA_PROMPT = """
@@ -60,12 +61,18 @@ class MetadataAgent(BaseAgent):
 
         logger.info("Running Metadata Agent...")
 
+        # Use only a few chunks instead of the entire paper
+        context = chunk_service.get_context(
+            paper,
+            max_chunks=3,
+        )
+
         prompt = f"""
 {METADATA_PROMPT}
 
 Research Paper
 
-{paper}
+{context}
 """
 
         result = super().run(

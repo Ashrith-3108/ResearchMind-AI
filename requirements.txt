@@ -56,3 +56,5 @@ pytest
 pytest-cov
 
 torchvision
+langchain-google-genai
+google-generativeai

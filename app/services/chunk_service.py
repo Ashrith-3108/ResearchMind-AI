@@ -39,12 +39,6 @@ class ChunkService:
     def split(self, text: str) -> List[str]:
         """
         Split text into overlapping chunks.
-
-        Args:
-            text: Full document text
-
-        Returns:
-            List of text chunks.
         """
 
         if not text:
@@ -69,8 +63,6 @@ class ChunkService:
     def chunk_metadata(self, text: str) -> List[dict]:
         """
         Returns chunks with metadata.
-
-        Useful for vector databases.
         """
 
         chunks = self.split(text)
@@ -83,6 +75,30 @@ class ChunkService:
             }
             for idx, chunk in enumerate(chunks)
         ]
+
+    # ==========================================================
+    # NEW
+    # ==========================================================
+
+    def get_context(
+        self,
+        text: str,
+        max_chunks: int = 3,
+    ) -> str:
+        """
+        Returns only the first few chunks.
+
+        This dramatically reduces token usage and
+        is the first step toward Retrieval-Augmented
+        Generation (RAG).
+        """
+
+        chunks = self.split(text)
+
+        if not chunks:
+            return ""
+
+        return "\n\n".join(chunks[:max_chunks])
 
 
 chunk_service = ChunkService()
