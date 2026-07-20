@@ -140,10 +140,45 @@ Confidence
 
         response = llm_service.invoke(prompt)
 
+        # -------------------------------
+        # Convert Gemini response to string
+        # -------------------------------
+
+        markdown = ""
+
+        if isinstance(response.content, str):
+
+            markdown = response.content
+
+        elif isinstance(response.content, list):
+
+            parts = []
+
+            for item in response.content:
+
+                if isinstance(item, str):
+
+                    parts.append(item)
+
+                elif isinstance(item, dict):
+
+                    if item.get("type") == "text":
+                        parts.append(item.get("text", ""))
+
+                elif hasattr(item, "text"):
+
+                    parts.append(item.text)
+
+            markdown = "\n".join(parts)
+
+        else:
+
+            markdown = str(response.content)
+
         logger.info("Final report generated successfully.")
 
         return {
-            "markdown": response.content,
+            "markdown": markdown,
             "report_json": {
                 "metadata": metadata,
                 "analysis": analysis,

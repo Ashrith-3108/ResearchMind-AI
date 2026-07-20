@@ -1,3 +1,5 @@
+import json
+
 from langchain_core.output_parsers import PydanticOutputParser
 
 from app.services.llm_service import llm_service
@@ -25,7 +27,7 @@ Return ONLY valid JSON.
 
 Do not explain.
 
-Do not wrap the JSON inside markdown.
+Do not wrap JSON inside markdown.
 
 {parser.get_format_instructions()}
 """
@@ -38,60 +40,83 @@ Do not wrap the JSON inside markdown.
 
         if hasattr(response, "content"):
 
-            # OpenAI / OpenRouter
-            if isinstance(response.content, str):
+            content = response.content
 
-                raw = response.content.strip()
+            # OpenAI response
+            if isinstance(content, str):
 
-            # Gemini
-            elif isinstance(response.content, list):
+                raw = content.strip()
+
+            # Gemini response
+            elif isinstance(content, list):
 
                 texts = []
 
-                for part in response.content:
+                for item in content:
 
-                    if isinstance(part, str):
+                    if isinstance(item, str):
 
-                        texts.append(part)
+                        texts.append(item)
 
-                    elif hasattr(part, "text"):
+                    elif isinstance(item, dict):
 
-                        texts.append(part.text)
+                        # Gemini returns:
+                        # {'type':'text','text':'{...json...}'}
+
+                        if item.get("type") == "text":
+                            texts.append(item.get("text", ""))
+
+                    elif hasattr(item, "text"):
+
+                        texts.append(item.text)
 
                     else:
 
-                        texts.append(str(part))
+                        texts.append(str(item))
 
                 raw = "\n".join(texts).strip()
 
             else:
 
-                raw = str(response.content).strip()
+                raw = str(content).strip()
 
         if not raw:
 
-            logger.error("LLM returned an empty response.")
+            raise ValueError("LLM returned empty response.")
 
-            raise ValueError(
-                "LLM returned an empty response."
-            )
+        logger.info("Raw LLM Output:")
+        logger.info(raw[:1500])
 
-        logger.info("LLM Response Received")
+        # Remove markdown if model returned it
+        if raw.startswith("```json"):
 
-        logger.info(raw[:1000])
+            raw = raw.replace("```json", "").replace("```", "").strip()
+
+        elif raw.startswith("```"):
+
+            raw = raw.replace("```", "").strip()
+
+        # Sometimes Gemini double-encodes JSON
+        try:
+
+            obj = json.loads(raw)
+
+            if isinstance(obj, str):
+
+                raw = obj
+
+        except Exception:
+
+            pass
 
         try:
 
-            result = parser.parse(raw)
+            return parser.parse(raw)
 
-            logger.info("Successfully parsed LLM response.")
+        except Exception:
 
-            return result
+            logger.exception("Failed to parse JSON")
 
-        except Exception as e:
+            print(raw)
 
-            logger.exception("Failed to parse LLM response.")
-
-            logger.error(raw)
-
-            raise e
+            raise
