@@ -25,7 +25,7 @@ class Settings(BaseSettings):
 
     TEMPERATURE: float = 0.0
 
-    MAX_TOKENS: int = 4096
+    MAX_TOKENS: int = 1024
 
     # ============================
     # Project
