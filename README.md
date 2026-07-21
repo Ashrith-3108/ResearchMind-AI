@@ -274,7 +274,7 @@ Suggested screenshots:
 
 # 👨‍💻 Author
 
-**Balakrishna Tadela**
+**Ashrith Vavillapally**
 
 Final Year B.Tech (Artificial Intelligence & Machine Learning)
 
@@ -283,10 +283,10 @@ Malla Reddy University
 Hyderabad, India
 
 GitHub:
-https://github.com/<your-github-username>
+https://github.com/<Ashrith-3108>
 
 LinkedIn:
-https://linkedin.com/in/<your-linkedin>
+https://linkedin.com/in/<[your-linkedin](https://www.linkedin.com/in/vavillapally-ashrith-9823482a1/)>
 
 ---
 
